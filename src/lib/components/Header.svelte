@@ -12,4 +12,14 @@
     background: #2c3e50;
     color: white;
   }
+
+  nav a {
+    margin-right: 1rem;
+    color: white;
+    text-decoration: none;
+  }
+
+  nav a:hover {
+    text-decoration: underline;
+  }
 </style>

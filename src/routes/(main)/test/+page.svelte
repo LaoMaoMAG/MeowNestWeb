@@ -8,7 +8,7 @@ import Card from "#lib/components/Card.svelte";
   <p>这里是内容</p>
 </Card>
 
-<br/>
+<br />
 
 <Card title="测试"
   description="这是个测试的组件"
