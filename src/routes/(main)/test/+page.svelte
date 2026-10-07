@@ -2,12 +2,13 @@
 import Card from "#lib/components/Card.svelte";
 </script>
 
-<h1>Welcome to SvelteKit</h1>
-<p>Visit <a href="https://svelte.dev/docs/kit">svelte.dev/docs/kit</a> to read the documentation</p>
+<h1>测试页面</h1>
 
 <Card>
   <p>这里是内容</p>
 </Card>
+
+<br/>
 
 <Card title="测试"
   description="这是个测试的组件"
