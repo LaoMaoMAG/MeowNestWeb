@@ -25,6 +25,6 @@
   
   .content-container {
     min-height: calc(100vh - 120px);
-    padding: 2rem;
+    margin: 20px 0px;
   }
 </style>

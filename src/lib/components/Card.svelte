@@ -151,4 +151,9 @@ let {
   opacity: 0.55;
   margin: 18px 0 22px;
 }
+
+.stack-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 7px 7px 0 #9e8b76;
+}
 </style>
