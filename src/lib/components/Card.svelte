@@ -1,159 +1,175 @@
 <script lang="ts">
-import type { Snippet } from "svelte";
+  import type { Snippet } from "svelte";
 
-interface Props {
-  /** 主标题 */
-  title?: string;
+  interface Props {
+    /** 主标题 */
+    title?: string;
+    /** 描述 */
+    description?: string;
+    /** 标签 */
+    tag?: string;
+    /** 主体内容 */
+    children?: Snippet;
+    /** 底部内容 */
+    footer?: Snippet;
+    /** CSS 选择器 */
+    class?: string;
+  }
 
-  /** 描述 */
-  description?: string;
-
-  /** 标签 */
-  tag?: string;
-
-  /** 主体内容 */
-  children?: Snippet;
-
-  /** 底部内容 */
-  footer?: Snippet;
-
-  /** CSS 选择器 */
-  class?: string;
-}
-
-let {
-  title,
-  description,
-  tag,
-  children,
-  footer,
-  class: className = "",
-}: Props = $props();
+  let {
+    title,
+    description,
+    tag,
+    children,
+    footer,
+    class: className = "",
+  }: Props = $props();
 </script>
 
 <section class="stack-card {className}">
-    {#if title || description || tag}
-        <header class="card-header">
-            <div class="header-left">
-                <h2>{title}</h2>
-                {#if description}
-                    <p>{description}</p>
-                {/if}
-            </div>
-            {#if tag}
-                <span class="header-tag">{tag}</span>
-            {/if}
-        </header>
-
+  {#if title || description || tag}
+    <header class="card-header">
+      {#if title}
+        <h2 class="header-title">{title}</h2>
+      {/if}
+      {#if tag}
+        <span class="header-tag">{tag}</span>
+      {/if}
+      {#if description}
+        <p class="header-description">{description}</p>
+      {:else}
         <div class="dashed-divider"></div>
-    {/if}
+      {/if}
+    </header>
+  {/if}
 
-    <div class="card-content">
-        {@render children?.()}
-    </div>
+  <div class="card-content">
+    {@render children?.()}
+  </div>
 
-    {#if footer}
-        <div class="dashed-divider bottom-divider"></div>
-        <footer>
-            {@render footer()}
-        </footer>
-    {/if}
+  {#if footer}
+    <div class="dashed-divider bottom-divider"></div>
+    <footer class="card-footer">
+      {@render footer()}
+    </footer>
+  {/if}
 </section>
 
 <style>
-/* 卡片 */
-.stack-card {
-  --paper: #fffaf1;
-  --ink: #45392f;
-  --muted: #827264;
-  --line: #bba890;
-  --shadow: 5px 5px 0 #9e8b76;
-  --radius: 18px;
-  position: relative;
-  overflow: hidden;
-  box-sizing: border-box;
-  min-width: 0;
-  margin: 0;
-  padding: 22px 26px;
-  background: var(--paper);
-  border: 2px solid var(--line);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow);
-  color: var(--ink);
-  font-family: ui-rounded, "Trebuchet MS", "PingFang SC", "Microsoft YaHei",
-    sans-serif;
-  line-height: 1.6;
-  transition:
-    transform 0.18s ease,
-    box-shadow 0.18s ease,
-    border-color 0.18s ease,
-    background 0.18s ease;
-}
+  .stack-card {
+    --paper: #fffaf1;
+    --ink: #45392f;
+    --muted: #827264;
+    --line: #bba890;
+    --shadow: 5px 5px 0 #9e8b76;
+    --radius: 18px;
+    --shadow-hover: 7px 7px 0 rgba(69, 57, 47, 0.16);
 
-/* 卡片内圆 */
-.stack-card::after {
-  content: "";
-  position: absolute;
-  width: 160px;
-  height: 160px;
-  right: -78px;
-  top: -92px;
-  border-radius: 50%;
-  background: rgba(216, 163, 75, 0.08);
-  pointer-events: none;
-}
+    position: relative;
+    box-sizing: border-box;
+    min-width: 0;
+    margin: 0;
+    padding: 17px;
+    overflow: hidden;
+    color: var(--ink);
+    background: var(--paper);
+    border: 2px solid var(--line);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    font-family: ui-rounded, "Trebuchet MS", "PingFang SC", "Microsoft YaHei", sans-serif;
+    line-height: 1.6;
+    transition: transform 0.18s ease, box-shadow 0.18s ease,
+      border-color 0.18s ease, background 0.18s ease;
+  }
 
-/* 头部 */
-.card-header {
-  position: relative;
-  z-index: 1;
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 16px;
-}
+  .stack-card::after {
+    content: "";
+    position: absolute;
+    top: -92px;
+    right: -78px;
+    width: 160px;
+    height: 160px;
+    border-radius: 50%;
+    background: rgba(216, 163, 75, 0.08);
+    pointer-events: none;
+  }
 
-/* 头部标题 */
-.header-left h2 {
-  margin: 0;
-  font-size: 1.3rem;
-  font-weight: 700;
-  color: var(--ink);
-  letter-spacing: 0.02em;
-}
+  .card-header {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-areas: "title meta" "desc desc";
+    align-items: end;
+    gap: 0 12px;
+    margin-bottom: 15px;
+  }
 
-/* 头部描述 */
-.header-left p {
-  margin: 8px 0 0;
-  font-size: 0.82rem;
-  color: var(--muted);
-  line-height: 1.55;
-}
+  .header-title {
+    grid-area: title;
+    min-width: 0;
+    margin: 0;
+    color: var(--ink);
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    overflow-wrap: anywhere;
+  }
 
-/* 头部标签 */
-.header-tag {
-  flex-shrink: 0;
-  padding-top: 6px;
-  font-size: 0.72rem;
-  font-weight: 700;
-  color: var(--muted);
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-}
+  .header-tag {
+    grid-area: meta;
+    align-self: center;
+    justify-self: end;
+    min-width: 0;
+    color: var(--muted);
+    font-size: 10px;
+    font-weight: 900;
+    line-height: 1.4;
+    letter-spacing: 0.11em;
+    text-align: right;
+    white-space: nowrap;
+  }
 
-/* 虚线 */
-.dashed-divider {
-  position: relative;
-  z-index: 1;
-  width: 100%;
-  height: 0;
-  border-bottom: 1px dashed var(--line);
-  opacity: 0.55;
-  margin: 18px 0 22px;
-}
+  .header-description {
+    grid-area: desc;
+    min-width: 0;
+    margin: 5px 0 0;
+    padding-bottom: 9px;
+    color: var(--muted);
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 1.6;
+    letter-spacing: 0;
+    border-bottom: 1px dashed var(--line);
+    overflow-wrap: anywhere;
+  }
 
-.stack-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 7px 7px 0 #9e8b76;
-}
+  .dashed-divider {
+    grid-area: desc;
+    width: 100%;
+    height: 0;
+    margin: 5px 0 9px;
+    border-bottom: 1px dashed var(--line);
+    opacity: 0.55;
+  }
+
+  .bottom-divider {
+    position: relative;
+    z-index: 1;
+    margin: 16px 0 14px;
+  }
+
+  .card-content,
+  .card-footer {
+    position: relative;
+    z-index: 1;
+    min-width: 0;
+  }
+
+  .stack-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-hover);
+  }
+
 </style>
